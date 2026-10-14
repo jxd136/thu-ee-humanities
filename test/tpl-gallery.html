@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>纸张模板总览</title>
+<link rel="stylesheet" href="../src/styles.css">
+<style>
+  body { margin: 0; padding: 16px; background: #efe9dc; font-family: "PingFang SC","Microsoft YaHei",sans-serif; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  .tile { }
+  .tile h4 { margin: 0 0 4px; font-size: 12.5px; color: #4a423a; font-weight: 600; }
+  .tile p { margin: 0 0 7px; font-size: 11.5px; color: #8a7f72; }
+  .mini { position: relative; width: 100%; aspect-ratio: 4/3; border-radius: 5px; overflow: hidden;
+          box-shadow: 0 6px 16px -8px rgba(0,0,0,.5), inset 0 0 0 1px rgba(0,0,0,.07); }
+  .mini__tex { position: absolute; inset: 0; mix-blend-mode: multiply; pointer-events: none; }
+  .mini__line { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .mini__piece { position: absolute; padding: 5px 10px; font-family: "Songti SC",STSong,SimSun,serif;
+                 font-size: 15px; letter-spacing: .05em; color: #241f1a; background: #fbf6ea;
+                 box-shadow: 0 3px 7px rgba(0,0,0,.4); border-radius: 2px; }
+</style>
+</head>
+<body>
+<div class="grid" id="grid"></div>
+<pre id="p15">running…</pre>
+<script src="../src/paper.js"></script>
+<script>
+var grid = document.getElementById('grid');
+var info = [];
+
+PaperLab.BG_TEMPLATES.forEach(function (t) {
+  var tile = document.createElement('div');
+  tile.className = 'tile';
+
+  var h = document.createElement('h4');
+  h.textContent = t.name + '  ' + t.key;
+  var p = document.createElement('p');
+  p.textContent = t.desc;
+  var mini = document.createElement('div');
+  mini.className = 'mini';
+  mini.style.background = t.paper || '#211d1c';
+
+  /* 纹理层 */
+  var texKind = (t.textures && t.textures[0]) || null;
+  if (texKind) {
+    var url = PaperLab.textureUrl(texKind, { seed: 0 });
+    var tex = document.createElement('div');
+    tex.className = 'mini__tex';
+    tex.style.backgroundImage = 'url(' + url + ')';
+    tex.style.backgroundSize = (t.key === 'kraft' ? '300px' : '480px');
+    if (t.dark) tex.style.mixBlendMode = 'screen';
+    mini.appendChild(tex);
+  }
+
+  /* 线条层：用真 canvas 画，和导出走同一个函数 */
+  if (t.line) {
+    var W = 520, H = 390;
+    var cv = document.createElement('canvas');
+    cv.width = W; cv.height = H;
+    cv.className = 'mini__line';
+    PaperLab.drawLines(cv.getContext('2d'), t.line, W, H, 1);
+    mini.appendChild(cv);
+  }
+
+  /* 放两块碎片做对比 */
+  [['把黄昏折起来', 14, 22, -3], ['月亮失眠了', 44, 56, 4]].forEach(function (pc) {
+    var el = document.createElement('div');
+    el.className = 'mini__piece';
+    el.textContent = pc[0];
+    el.style.left = pc[1] + '%';
+    el.style.top = pc[2] + '%';
+    el.style.transform = 'rotate(' + pc[3] + 'deg)';
+    if (t.dark) { el.style.background = '#f3ead8'; }
+    mini.appendChild(el);
+  });
+
+  tile.appendChild(h); tile.appendChild(p); tile.appendChild(mini);
+  grid.appendChild(tile);
+
+  info.push({
+    key: t.key, name: t.name,
+    底色: t.paper || '(深色底板)',
+    纹理: (t.textures || []).join(',') || '无',
+    线条: t.line ? t.line.type : '无'
+  });
+});
+
+document.getElementById('p15').textContent = JSON.stringify({
+  模板数: PaperLab.BG_TEMPLATES.length,
+  纹理数: PaperLab.TEXTURE_LIST.length,
+  明细: info
+}, null, 1);
+document.title = 'DONE';
+</script>
+</body>
+</html>

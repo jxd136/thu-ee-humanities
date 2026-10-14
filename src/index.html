@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>清华大学电子工程系团委 · 人文组 | 拼贴诗工作台</title>
+<meta name="description" content="清华大学电子工程系团委人文组主页：组织介绍 + 拼贴诗生成器（句法造词 · 电子拼贴 · 一键出图）">
+<meta name="theme-color" content="#f7f2e8">
+<meta property="og:title" content="电子系团委人文组 · 拼贴诗工作台">
+<meta property="og:description" content="按句法随机造词，把字剪下来歪歪扭扭地贴成一首诗。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%236f2c91'/%3E%3Ctext x='16' y='23' font-size='19' text-anchor='middle' fill='white' font-family='serif'%3E人%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ============================ 顶栏 ============================ -->
+<header class="topbar">
+  <div class="wrap topbar__inner">
+    <a class="brand" href="#top">
+      <span class="brand__mark">人</span>
+      <span class="brand__text">
+        <span class="brand__title">电子系团委 · 人文组</span>
+        <span class="brand__sub">Tsinghua EE · HUMANITIES</span>
+      </span>
+    </a>
+    <nav class="tabs" role="tablist" aria-label="页面导航">
+      <button class="tab" type="button" role="tab" data-tab="intro" aria-selected="true">关于我们</button>
+      <button class="tab" type="button" role="tab" data-tab="studio" aria-selected="false">拼贴诗工作台</button>
+      <button class="tab" type="button" role="tab" data-tab="assets" aria-selected="false">素材 · 剪字</button>
+      <button class="tab" type="button" role="tab" data-tab="help" aria-selected="false">玩法说明</button>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============================ 关于我们 ============================ -->
+  <section class="wrap" data-view="intro">
+    <div class="hero">
+      <span class="hero__kicker">Tsinghua EE · 人文组</span>
+      <h1 class="hero__title">把工科生的浪漫，<br><em>剪下来贴成诗</em>。</h1>
+      <p class="hero__lead">
+        人文组是电子工程系团委里负责「文字与审美」的部门：写稿、做图、办文化活动。
+        我们相信电路与诗句并不冲突——一个用示波器看波形，一个用剪刀看世界。
+        这页下面是我们做的拼贴诗生成器，欢迎随手玩一张带走。
+      </p>
+      <div class="hero__meta">
+        <span class="chip"><b>造词</b> 偏正 / 主谓 / 动宾 / 联合 …</span>
+        <span class="chip"><b>拼贴</b> 上传图片自动剪字</span>
+        <span class="chip"><b>出图</b> 一键导出 PNG</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="sec-head">
+        <span class="sec-num">01 / ABOUT</span>
+        <h2>我们是谁</h2>
+        <span class="sec-note">组织介绍</span>
+      </div>
+
+      <!-- ✏️ 需要修改：以下文案是占位框架，请按实际情况替换（搜索「占位」即可定位） -->
+      <div class="placeholder-note">
+        <span>✏️</span>
+        <span>
+          <b>占位文案提示：</b>本页所有组织介绍内容都可以直接在 HTML 里改，搜
+          <code>占位</code> 就能定位到需要替换的段落（人数、活动名称、口号等）。
+        </span>
+      </div>
+
+      <div class="intro-grid">
+        <div class="card intro-card">
+          <h3>一句话定位</h3>
+          <p>
+            人文组是电子系团委的<b>文字与视觉输出中枢</b>：团委的大事小情，先由我们写成能读的文字，
+            再由我们做成好看的图。我们既写会议纪要、活动预告、人物专访，也做海报、推送排版和
+            舞台背景；既在键盘前改第 7 版标题，也在深夜的打印店门口等一块展板。
+          </p>
+          <p>
+            我们做的事情听起来不「电子」，但恰恰是电子系最缺的一块：把技术语言翻译成人话，
+            把一次活动翻译成一段记忆。<b>工科的严谨 + 文科的表达</b>，这是我们想守住的结合点。
+          </p>
+          <div class="quote">
+            「我们不改电路，<br>我们改稿。」
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>基本情况</h3>
+          <ul class="fact-list">
+            <li><span class="k">隶属</span><span class="v">清华大学电子工程系团委</span></li>
+            <li><span class="k">分工</span><span class="v">宣传文案 · 视觉设计 · 文化活动</span></li>
+            <li><span class="k">成员</span><span class="v">占位：副书记 X 名、组长 X 名、组员 X 名</span></li>
+            <li><span class="k">招牌</span><span class="v">占位：如「拼贴诗工作坊」「人文夜谈」「三行诗大赛」</span></li>
+            <li><span class="k">联系</span><span class="v">占位：BBS 版面 / 邮箱 / 招新群</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="duty-grid">
+        <article class="duty">
+          <span class="duty__no">A</span>
+          <h4>写</h4>
+          <p>新闻稿、活动预告、人物专访、总结报告。把一场活动的来龙去脉，写成别人愿意读完的东西。</p>
+          <div class="duty__tags"><span>文案</span><span>专访</span><span>推送稿</span></div>
+        </article>
+        <article class="duty">
+          <span class="duty__no">B</span>
+          <h4>做</h4>
+          <p>海报、展板、banner、PPT 模板、周边设计。让文字被看见，让活动有统一的视觉脸。</p>
+          <div class="duty__tags"><span>海报</span><span>排版</span><span>周边</span></div>
+        </article>
+        <article class="duty">
+          <span class="duty__no">C</span>
+          <h4>办</h4>
+          <p>拼贴诗工作坊、读书会、观影会、三行诗征集。让工科同学有一个不谈绩点的下午。</p>
+          <div class="duty__tags"><span>工作坊</span><span>征集</span><span>沙龙</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ 工作台 ============================ -->
+  <section class="wrap" data-view="studio" hidden>
+    <div class="hero" style="padding-bottom:18px">
+      <span class="hero__kicker">Collage Poem Studio</span>
+      <h1 class="hero__title" style="font-size:clamp(26px,4vw,40px)">拼贴诗工作台</h1>
+      <p class="hero__lead">
+        左边造词，右边拼贴：造出来的词会变成一张张小纸片，拖到画布上，歪一点、叠一点、贴一截胶带，
+        就是一首诗。也可以去「素材 · 剪字」上传图片，从画面上直接把字剪下来。
+      </p>
+    </div>
+
+    <div class="studio-grid">
+
+      <!-- —— 造词机：四个同构列表（短语 / 句子 / 词汇 / 自定义） —— -->
+      <div class="panel">
+        <div class="panel__head">
+          <h3>造词机</h3>
+          <span class="panel__hint">点分类勾选 · 点造词出样例</span>
+        </div>
+        <div class="panel__body">
+          <div id="wmPanels"></div>
+
+          <div class="history">
+            <h4>最近造过的词句（点一下即贴上板）</h4>
+            <div class="history-list" id="historyList"></div>
+          </div>
+
+          <div class="field" style="margin-top:14px">
+            <div class="btn-row">
+              <button class="btn btn--sm" type="button" id="btnRandom">随机拼一首</button>
+              <button class="btn btn--sm btn--ghost" type="button" onclick="document.querySelector('.tab[data-tab=&quot;assets&quot;]').click()">去剪字 →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- —— 拼贴板 —— -->
+      <div class="panel board-panel">
+        <div class="panel__head">
+          <h3>拼贴板</h3>
+          <span class="panel__hint">拖动排版 · 双击改字 · Ctrl+Z 撤销</span>
+        </div>
+
+        <div class="board-toolbar">
+          <button class="btn btn--sm" type="button" id="btnUndo" title="撤销 Ctrl+Z">↺ 撤销</button>
+          <button class="btn btn--sm" type="button" id="btnRedo" title="重做 Ctrl+Shift+Z">↻ 重做</button>
+          <span class="sep"></span>
+          <button class="btn btn--sm" type="button" id="btnClear">清空</button>
+          <span class="sep"></span>
+          <button class="btn btn--sm" type="button" id="btnTemplate">背景模板</button>
+          <button class="btn btn--sm" type="button" id="btnRandomTpl" title="随机换一套纸">🎲</button>
+          <span class="sep"></span>
+          <button class="btn btn--sm btn--primary" type="button" id="btnExport" style="margin-left:auto">导出 PNG</button>
+        </div>
+
+        <div class="board-stage">
+          <div class="board" id="board" data-tone="charcoal">
+            <!-- 纸张层：底色 + 纹理 + 线条，都画在这里；碎片在更上层 -->
+            <div class="board__paper" id="boardPaper" aria-hidden="true">
+              <div class="board__tex" id="boardTex"></div>
+              <canvas class="board__lines" id="boardLines"></canvas>
+            </div>
+            <div class="board__empty" id="boardEmpty">
+              还没有碎片<br>
+              左边「造词」后点 ↘ 贴上来
+            </div>
+          </div>
+
+          <div class="fx-row" id="fxRow" hidden>
+            <span class="fx-row__label">纸感</span>
+            <span class="seg seg--sm" id="texRow" role="group" aria-label="纸感"></span>
+            <span class="fx-row__label">褶皱</span>
+            <input type="range" id="foldRange" min="0" max="100" value="35" aria-label="褶皱强度">
+            <span class="fx-val" id="foldVal">35</span>
+            <span class="fx-row__label">墨感</span>
+            <input type="range" id="inkRange" min="0" max="100" value="30" aria-label="墨水凹凸">
+            <span class="fx-val" id="inkVal">30</span>
+            <span class="fx-row__label">用量</span>
+            <input type="range" id="inkAmtRange" min="0" max="100" value="45" aria-label="墨感用量">
+            <span class="fx-val" id="inkAmtVal">45</span>
+            <button class="btn btn--sm" type="button" data-act="dice" title="随机一套质感（纸感 + 褶皱 + 墨感 + 纸色）">🎲 随机质感</button>
+            <button class="btn btn--sm" type="button" data-act="applyAll" title="把这一片的质感应用到板上所有碎片">应用到全部</button>
+          </div>
+
+          <!-- 碎片浮动工具条 -->
+          <div class="piece-tools" id="pieceTools" role="toolbar" aria-label="碎片工具">
+            <button type="button" data-act="rot-l" title="逆时针 3°">↺</button>
+            <button type="button" data-act="rot-r" title="顺时针 3°">↻</button>
+            <span class="divider"></span>
+            <button type="button" data-act="smaller" title="缩小">−</button>
+            <button type="button" data-act="bigger" title="放大">＋</button>
+            <span class="zoom">
+              <input type="range" id="zoomRange" min="28" max="360" value="100" aria-label="尺寸">
+              <span id="zoomVal">100%</span>
+            </span>
+            <span class="divider"></span>
+            <button type="button" data-act="tape" aria-pressed="false" title="贴 / 撕胶带">▭</button>
+            <button type="button" data-act="fx" aria-pressed="false" title="纸感与印刷质感">质</button>
+            <button type="button" data-act="flat" aria-pressed="false" title="切换纸片外形（剪刀口 / 方角）">✂</button>
+            <button type="button" data-act="font" title="换字体">字</button>
+            <button type="button" data-act="ink" title="换纸色">◐</button>
+            <span class="divider"></span>
+            <button type="button" data-act="front" title="放到最上层">↑</button>
+            <button type="button" data-act="dup" title="再贴一片一样的（D）">⎘</button>
+            <button type="button" data-act="del" title="删掉 Del">✕</button>
+          </div>
+        </div>
+
+        <div class="board-foot">
+          <span>拖动碎片排版</span><span class="dot"></span>
+          <span>双击文字可改字</span><span class="dot"></span>
+          <span>选中后按 <kbd>↑↓←→</kbd> 微调、<kbd>[</kbd><kbd>]</kbd> 转角度</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ 素材 · 剪字 ============================ -->
+  <section class="wrap" data-view="assets" hidden>
+    <div class="hero" style="padding-bottom:18px">
+      <span class="hero__kicker">Cut &amp; Paste</span>
+      <h1 class="hero__title" style="font-size:clamp(26px,4vw,40px)">素材 · 剪字</h1>
+      <p class="hero__lead">
+        真正的拼贴诗，字是从纸上剪下来的。上传一张带文字的图片（杂志页、旧海报、自己的截图都行），
+        页面会自动识别出文字位置并剪成碎片，点一下就贴到拼贴板上。
+      </p>
+    </div>
+
+    <div class="asset-grid">
+      <div class="panel">
+        <div class="panel__head"><h3>导入图片</h3><span class="panel__hint">不上传服务器</span></div>
+        <div class="panel__body">
+          <div class="drop" id="drop">
+            <strong>点击选择 / 拖到这里 / 直接 Ctrl+V 粘贴</strong>
+            <span>建议：字大、背景干净的图（杂志内页、书页翻拍、海报局部）<br>图片只在你的浏览器里处理，不会上传到任何服务器。</span>
+          </div>
+          <input type="file" id="imageInput" accept="image/*" multiple hidden>
+
+          <div class="field" style="margin-top:14px">
+            <div class="btn-row">
+              <button class="btn btn--sm" type="button" id="btnSample">用内置样张试试</button>
+            </div>
+          </div>
+
+          <div class="ctrl-row">
+            <label for="cropMode" style="flex:none">识别模式</label>
+            <select id="cropMode" class="btn btn--sm" style="flex:1">
+              <option value="auto">自动判断</option>
+              <option value="dark">深字浅底</option>
+              <option value="light">浅字深底</option>
+            </select>
+          </div>
+
+          <div class="ctrl-row">
+            <label for="thrBias" style="flex:none">识别阈值</label>
+            <input type="range" id="thrBias" min="-60" max="60" step="5" value="0">
+            <span class="val" id="thrVal">0</span>
+          </div>
+          <p class="type-note" style="margin-top:10px">
+            字没被框住 → 调大阈值；把背景纹理也框进来了 → 调小阈值。
+          </p>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel__head">
+          <h3>碎片篮</h3>
+          <span class="panel__hint">点碎片贴到板上</span>
+        </div>
+        <div class="panel__body">
+          <div class="frag-tray" id="fragTray"></div>
+          <div class="btn-row" style="margin-top:16px">
+            <button class="btn btn--sm btn--primary" type="button" id="btnAddAll">全部贴到板上</button>
+            <button class="btn btn--sm" type="button" id="btnClearFrags">清空碎片篮</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="sec-head">
+        <span class="sec-num">TIP</span>
+        <h2>剪字小经验</h2>
+      </div>
+      <div class="help-grid">
+        <div class="help-item">
+          <h4>什么图最好剪</h4>
+          <ul>
+            <li>字大、笔画粗：海报标题、书封、杂志大标题</li>
+            <li>背景干净：白纸、纯色底、天空</li>
+            <li>对比度强：黑字白底最稳</li>
+          </ul>
+        </div>
+        <div class="help-item">
+          <h4>剪不干净怎么办</h4>
+          <ul>
+            <li>拖动「识别阈值」，直到方框刚好框住字</li>
+            <li>深底浅字记得把模式切成「浅字深底」</li>
+            <li>在预览图上点方框可以取消不要的那几个</li>
+          </ul>
+        </div>
+        <div class="help-item">
+          <h4>使用提醒</h4>
+          <ul>
+            <li>导入的图片只在浏览器本地处理</li>
+            <li>请使用自己拍摄、自己制作或已获授权的素材</li>
+            <li>拼贴成品建议仅用于个人欣赏与非商业展示</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ 玩法说明 ============================ -->
+  <section class="wrap" data-view="help" hidden>
+    <div class="hero" style="padding-bottom:18px">
+      <span class="hero__kicker">How to play</span>
+      <h1 class="hero__title" style="font-size:clamp(26px,4vw,40px)">玩法说明</h1>
+      <p class="hero__lead">三步做一张拼贴诗：造词 → 剪字 → 拼贴导出。没有灵感的时候，直接按「随机拼一首」。</p>
+    </div>
+
+    <div class="help-grid">
+      <div class="help-item">
+        <h4>① 造词机</h4>
+        <ul>
+          <li>四个列表：<b>短语</b>（10 种句法）· <b>句子</b>（论述整句 / 见闻 / 抽象长句 / 诗性句 / 短句 / 名句）· <b>词汇</b>（术语 / 定语 / 副词 / 谓语 / 连接词 / 意象词）· <b>自定义</b></li>
+          <li>每个列表里点「子分类」勾选，再点「造词」——一次出 5 条随机样例</li>
+          <li>按 <kbd>R</kbd> 也能造词（用「短语」列表）</li>
+          <li>⧉ 复制文字（粘到别处）· ↘ 贴到板子上 · ❞ 连出处一起贴 · ≡ 一次复制全部</li>
+          <li>造过的词句会自动进下面的「最近造过的词句」，随时点回来用（只存当前页面，刷新即清空）</li>
+        </ul>
+      </div>
+      <div class="help-item">
+        <h4>② 剪字</h4>
+        <ul>
+          <li>上传带文字的图片，自动框出文字块</li>
+          <li>点方框可取消 / 选中，再点「剪下选中的文字」</li>
+          <li>碎片进入「碎片篮」，点一下就贴到板上</li>
+          <li>内置样张可以直接体验全流程</li>
+        </ul>
+      </div>
+      <div class="help-item">
+        <h4>③ 拼贴</h4>
+        <ul>
+          <li>拖动碎片；右下角小方块拖拽可缩放</li>
+          <li>选中后弹出工具条：角度、大小、胶带、字体、纸色、层级</li>
+          <li>⎘ 再贴一片（内容一样、位置和角度错开），用来做叠印效果</li>
+          <li>双击文字碎片可以直接改字</li>
+          <li>底板可切换黑板 / 牛皮纸 / 米白纸 / 方格纸</li>
+        </ul>
+      </div>
+      <div class="help-item">
+        <h4>快捷键</h4>
+        <ul>
+          <li><kbd>Ctrl</kbd>+<kbd>Z</kbd> 撤销 · <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd> 重做</li>
+          <li><kbd>Del</kbd> 删除选中 · <kbd>D</kbd> 复制一片</li>
+          <li><kbd>[</kbd> <kbd>]</kbd> 旋转 · 方向键微调（<kbd>Shift</kbd> 加速）</li>
+          <li><kbd>Esc</kbd> 取消选中</li>
+        </ul>
+      </div>
+      <div class="help-item">
+        <h4>导出</h4>
+        <ul>
+          <li>「导出 PNG」可选 1×/2×/3× 分辨率</li>
+          <li>可加标题、去掉落款、透明背景</li>
+          <li>「做旧调色」会整体压一层旧纸色，更像实物</li>
+        </ul>
+      </div>
+      <div class="help-item">
+        <h4>关于草稿</h4>
+        <ul>
+          <li>拼贴内容会自动存在本机浏览器里，关掉再打开还在</li>
+          <li>「清空」后按 <kbd>Ctrl</kbd>+<kbd>Z</kbd> 还能救回来</li>
+          <li>换电脑 / 换浏览器不会同步</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <span>© <span id="year">2025</span> 清华大学电子工程系团委 · 人文组</span>
+    <span>拼贴诗工作台 · 全部素材在浏览器本地处理</span>
+    <span>文案与视觉占位内容请按实际情况替换</span>
+  </div>
+</footer>
+
+<!-- ============================ 导出弹窗 ============================ -->
+<div class="modal" id="modalExport" role="dialog" aria-modal="true" aria-labelledby="expTitleLabel">
+  <div class="modal__box" style="width:min(560px,100%)">
+    <div class="modal__head">
+      <h3 id="expTitleLabel">导出拼贴诗</h3>
+      <button class="btn btn--sm" type="button" data-close>关闭</button>
+    </div>
+    <div class="modal__body">
+      <div class="field">
+        <label for="expName">文件名</label>
+        <input class="btn" id="expName" type="text" value="拼贴诗" style="width:100%;text-align:left;padding:9px 12px">
+      </div>
+      <div class="field">
+        <label for="expTitle">画面上方标题（留空则不加）</label>
+        <input class="btn" id="expTitle" type="text" placeholder="例如：失眠者的春天" style="width:100%;text-align:left;padding:9px 12px">
+      </div>
+      <div class="field">
+        <label for="expScale">分辨率</label>
+        <select class="btn" id="expScale" style="width:100%;text-align:left;padding:9px 12px">
+          <option value="1">1× 标准</option>
+          <option value="2" selected>2× 高清（推荐）</option>
+          <option value="3">3× 打印级</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="switch"><input type="checkbox" id="expTone" checked> 做旧调色（整体压一层旧纸色）</label>
+      </div>
+      <div class="field">
+        <label class="switch"><input type="checkbox" id="expMark" checked> 保留右下角落款</label>
+      </div>
+      <div class="field">
+        <label class="switch"><input type="checkbox" id="expTransparent"> 透明背景（只要碎片，不要底板）</label>
+      </div>
+      <div class="btn-row" style="margin-top:18px">
+        <button class="btn btn--primary btn--block" type="button" id="expDo">导出 PNG</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================ 剪字弹窗 ============================ -->
+<div class="modal" id="modalCrop" role="dialog" aria-modal="true" aria-labelledby="cropTitle">
+  <div class="modal__box">
+    <div class="modal__head">
+      <h3 id="cropTitle">识别到的文字</h3>
+      <span class="panel__hint" id="cropCount" style="margin-left:0"></span>
+      <button class="btn btn--sm" type="button" data-close>关闭</button>
+    </div>
+    <div class="modal__body">
+      <p class="type-note" style="margin-bottom:12px">
+        金色方框会被剪下来，点方框可以取消 / 恢复。确认后点「剪下选中的文字」。
+      </p>
+      <div class="crop-stage" id="cropStage"></div>
+      <div class="btn-row" style="margin-top:16px">
+        <button class="btn btn--sm" type="button" id="cropAll">全选</button>
+        <button class="btn btn--sm" type="button" id="cropNone">全不选</button>
+        <button class="btn btn--sm btn--primary" type="button" id="cropAdd" style="margin-left:auto">剪下选中的文字</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================ 背景模板弹窗 ============================ -->
+<div class="modal" id="modalTemplate" role="dialog" aria-modal="true" aria-labelledby="tplTitle">
+  <div class="modal__box" style="width:min(880px,100%)">
+    <div class="modal__head">
+      <h3 id="tplTitle">选择背景模板</h3>
+      <button class="btn btn--sm" type="button" id="tplRandom">随机一套</button>
+      <button class="btn btn--sm" type="button" data-close>关闭</button>
+    </div>
+    <div class="modal__body">
+      <div class="tpl-grid" id="tplGrid"></div>
+      <div class="ctrl-row" style="margin-top:16px">
+        <label for="texScaleRange" style="flex:none">纸纹粗细</label>
+        <input type="range" id="texScaleRange" min="50" max="220" value="100">
+        <span class="val" id="texScaleVal">100%</span>
+        <button class="btn btn--sm btn--ghost" type="button" id="texScaleReset">还原</button>
+      </div>
+      <p class="type-note" style="margin-top:10px">
+        模板只影响底板（颜色 + 纸纹 + 线条），不会动你已经贴好的碎片。
+        纸纹是可无缝平铺的，所以换了模板或改了窗口大小，纸的感觉都不会变。
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="src/paper.js"></script>
+<script src="src/corpus.js"></script>
+<script src="src/script.js"></script>
+<script>document.getElementById('year').textContent = String(new Date().getFullYear());</script>
+</body>
+</html>

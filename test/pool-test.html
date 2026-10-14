@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>造词机功能验证</title>
+<link rel="stylesheet" href="../src/styles.css">
+</head>
+<body>
+<div style="padding:12px">
+  <button id="btnPoolGen">取句</button>
+  <button id="btnPoolAll">全选语料库</button>
+  <button id="btnPoolNone">全不选</button>
+  <button id="btnCustomAdd">加入语料库</button>
+  <button id="btnCustomStickAll">全部贴到板上</button>
+  <button id="btnGenerate">造词</button>
+  <div class="acc" id="accStruct" open><summary><span class="acc__title">句法</span></summary>
+    <div class="seg" id="typeRow"></div><div id="typeNote"></div><div class="result-box" id="resultBox"></div>
+  </details>
+  <div class="acc" id="accPools"><summary><span class="acc__title">语料库</span></summary>
+    <div class="pool-list" id="poolList"></div><div class="result-box" id="poolResult"></div>
+  </div>
+  <div class="acc" id="accCustom"><summary><span class="acc__title">自定义</span></summary>
+    <textarea id="customInput"></textarea><span id="customCount"></span>
+  </div>
+  <span id="poolCount"></span>
+  <div id="historyList"></div>
+  <div class="board-stage">
+    <div class="board" id="board" data-tone="plain"><div class="board__paper" id="boardPaper"><div class="board__tex" id="boardTex"></div><canvas class="board__lines" id="boardLines"></canvas></div><div class="board__empty" id="boardEmpty"></div></div>
+    <div class="piece-tools" id="pieceTools"></div>
+  </div>
+  <button id="btnRandom">随机</button><button id="btnClear">清空</button>
+  <button id="btnUndo">撤销</button><button id="btnRedo">重做</button>
+  <button id="btnExport">导出</button><button id="btnTemplate">模板</button><button id="btnRandomTpl">🎲</button>
+  <div id="boardEmpty2"></div>
+  <div class="tpl-grid" id="tplGrid"></div>
+  <div class="modal" id="modalTemplate"><div data-close></div></div>
+  <div class="modal" id="modalExport"><div data-close></div><button id="expDo"></button>
+    <input id="expName"><input id="expTitle"><select id="expScale"><option value="2">2</option></select>
+    <input type="checkbox" id="expTone"><input type="checkbox" id="expMark"><input type="checkbox" id="expTransparent"></div>
+  <div class="modal" id="modalCrop"><div data-close></div><div class="crop-stage" id="cropStage"></div>
+    <span id="cropCount"></span><button id="cropAll"></button><button id="cropNone"></button><button id="cropAdd"></button></div>
+  <div id="fragTray"></div><input id="imageInput" type="file"><div id="drop"></div>
+  <button id="btnSample"></button><button id="btnAddAll"></button><button id="btnClearFrags"></button>
+  <select id="cropMode"><option value="auto">auto</option></select><input id="thrBias"><span id="thrVal"></span>
+  <div class="toast" id="toast"></div>
+</div>
+<pre id="p19" style="font-size:11px">running…</pre>
+<script src="../src/paper.js"></script>
+<script src="../src/corpus.js"></script>
+<script src="../src/script.js"></script>
+<script>
+var log = [];
+function p(k, v) { log.push(k + ': ' + (typeof v === 'string' ? v : JSON.stringify(v))); document.getElementById('p19').textContent = log.join('\n'); }
+
+setTimeout(function () {
+  /* 1. 语料库是否渲染出来 */
+  var pools = document.querySelectorAll('#poolList .pool');
+  p('语料库卡片数', pools.length);
+  var names = Array.prototype.map.call(pools, function (d) { return d.querySelector('.pool__name').textContent; });
+  p('语料库名称', names);
+
+  /* 2. 默认全部勾选 */
+  var checked = document.querySelectorAll('#poolList input[type=checkbox]:checked').length;
+  p('默认勾选数', checked);
+
+  /* 3. 取句 */
+  document.getElementById('btnPoolGen').click();
+  var pills = document.querySelectorAll('#poolResult .pill');
+  p('取句结果条数', pills.length);
+  var texts = Array.prototype.map.call(pills, function (r) {
+    var t = r.querySelector('.pill__txt').textContent;
+    var s = r.querySelector('.pill__src');
+    return t + (s ? ' [' + s.textContent.replace('—— ', '') + ']' : '');
+  });
+  p('样例', texts.slice(0, 5));
+
+  /* 4. 只留「论述摘句」，看组合是否通顺 */
+  document.getElementById('btnPoolNone').click();
+  var gen = document.querySelector('#poolList .pool[data-pool="essay"] input');
+  gen.checked = true; gen.dispatchEvent(new Event('change'));
+  document.getElementById('btnPoolGen').click();
+  var essay = Array.prototype.map.call(document.querySelectorAll('#poolResult .pill__txt'), function (e) { return e.textContent; });
+  p('论述摘句 x5', essay);
+
+  /* 5. 只留「名句」 */
+  document.getElementById('btnPoolNone').click();
+  var q = document.querySelector('#poolList .pool[data-pool="quotes"] input');
+  q.checked = true; q.dispatchEvent(new Event('change'));
+  document.getElementById('btnPoolGen').click();
+  var quotes = Array.prototype.map.call(document.querySelectorAll('#poolResult .pill'), function (r) {
+    return r.querySelector('.pill__txt').textContent + ' [' + (r.querySelector('.pill__src') || { textContent: '' }).textContent.replace('—— ', '') + ']';
+  });
+  p('名句 x5', quotes);
+
+  /* 6. 自定义输入 */
+  document.getElementById('customInput').value = '凌晨三点的宿舍楼\n我把台灯关了, 信号与系统';
+  document.getElementById('btnCustomAdd').click();
+  p('自定义条数', document.getElementById('customCount').textContent);
+  var customPool = document.querySelector('#poolList .pool[data-pool="custom"] .pool__count');
+  p('自定义卡计数', customPool ? customPool.textContent : '无');
+
+  /* 7. 贴到板上 */
+  document.getElementById('btnPoolGen').click();
+  var stick = document.querySelector('#poolResult .pill [data-act="stick"]');
+  stick.click();
+  p('板上碎片数', document.querySelectorAll('#board .piece').length);
+
+  /* 8. 连出处贴 */
+  document.querySelector('#poolList .pool[data-pool="quotes"] input').checked = true;
+  document.getElementById('btnPoolGen').click();
+  var qbtn = document.querySelector('#poolResult .pill [data-act="quote"]');
+  if (qbtn) { qbtn.click(); }
+  var pieces = document.querySelectorAll('#board .piece');
+  p('连出处贴后碎片数', pieces.length);
+  if (pieces.length) {
+    p('最后一片内容', JSON.stringify(pieces[pieces.length - 1].querySelector('.piece__text').textContent));
+  }
+
+  /* 9. 自定义全部贴板 */
+  document.getElementById('btnCustomStickAll').click();
+  p('全贴后碎片数', document.querySelectorAll('#board .piece').length);
+
+  p('历史条数', document.querySelectorAll('#historyList button').length);
+  document.title = 'DONE';
+}, 800);
+</script>
+</body>
+</html>

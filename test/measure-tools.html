@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>工具条定位：黄金几何</title>
+<link rel="stylesheet" href="../src/styles.css">
+</head>
+<body>
+<div class="wrap" style="padding-top:20px">
+  <div class="panel board-panel">
+    <div class="board-stage">
+      <div class="board" id="board" data-tone="charcoal"><div class="board__empty" id="boardEmpty"></div></div>
+      <div class="piece-tools" id="pieceTools" role="toolbar">
+        <button type="button" data-act="rot-l">↺</button>
+        <button type="button" data-act="rot-r">↻</button>
+        <span class="divider"></span>
+        <button type="button" data-act="smaller">−</button>
+        <button type="button" data-act="bigger">＋</button>
+        <span class="zoom"><input type="range" id="zoomRange" min="28" max="360" value="100"><span id="zoomVal">100%</span></span>
+        <span class="divider"></span>
+        <button type="button" data-act="tape">▭</button>
+        <button type="button" data-act="backing">纸</button>
+        <button type="button" data-act="flat">✂</button>
+        <button type="button" data-act="font">字</button>
+        <button type="button" data-act="ink">◐</button>
+        <span class="divider"></span>
+        <button type="button" data-act="front">↑</button>
+        <button type="button" data-act="dup">⎘</button>
+        <button type="button" data-act="del">✕</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<pre id="p11">running…</pre>
+
+<script>
+/* 用与 src/script.js 里 layoutTools() 完全相同的算法，验证几何是否正确 */
+function clamp(v, a, b) { return Math.min(b, Math.max(a, v)); }
+
+window.addEventListener('load', function () {
+  var board = document.getElementById('board');
+  var tools = document.getElementById('pieceTools');
+  var stage = board.parentElement;
+  var results = [];
+  var T, TT;
+
+  function layoutTools(pr) {
+    var boardRect = board.getBoundingClientRect();
+    var GAP = 10, EDGE = 8;
+    var cx = clamp(pr.left + pr.width / 2, boardRect.left + 4, boardRect.right - 4);
+    var cy = clamp(pr.top + pr.height / 2, boardRect.top + 4, boardRect.bottom - 4);
+
+    var top = cy - pr.height / 2 - TT - GAP;
+    var below = false;
+    if (top < boardRect.top + EDGE) { top = cy + pr.height / 2 + GAP; below = true; }
+    top = clamp(top, boardRect.top + EDGE, boardRect.bottom - TT - EDGE);
+    var left = clamp(cx - T / 2, boardRect.left + EDGE, boardRect.right - T - EDGE);
+    var arrowX = clamp(cx - left, 14, Math.max(14, T - 14));
+
+    var parent = tools.offsetParent;
+    var base = parent ? parent.getBoundingClientRect() : { left: 0, top: 0 };
+    var sx = parent ? parent.scrollLeft : window.scrollX;
+    var sy = parent ? parent.scrollTop : window.scrollY;
+    tools.style.left = Math.round(left - base.left + sx) + 'px';
+    tools.style.top = Math.round(top - base.top + sy) + 'px';
+    tools.style.setProperty('--arrow-x', Math.round(arrowX) + 'px');
+    tools.dataset.below = below ? '1' : '0';
+  }
+
+  tools.classList.add('is-open');
+  T = tools.offsetWidth; TT = tools.offsetHeight;
+
+  var cases = [
+    { name: '板中央',     w: 100, h: 50, x: 50, y: 50, rot: 0 },
+    { name: '靠上 10%',   w: 100, h: 50, x: 50, y: 10, rot: 0 },
+    { name: '最上 3%',    w: 100, h: 50, x: 50, y: 3,  rot: 0 },
+    { name: '靠下 92%',   w: 100, h: 50, x: 50, y: 92, rot: 0 },
+    { name: '最下 98%',   w: 100, h: 50, x: 50, y: 98, rot: 0 },
+    { name: '最左 3%',    w: 130, h: 50, x: 3,  y: 50, rot: 0 },
+    { name: '最右 97%',   w: 130, h: 50, x: 97, y: 50, rot: 0 },
+    { name: '旋转 15°',   w: 160, h: 60, x: 40, y: 45, rot: 15 },
+    { name: '放大 2.5×',  w: 120, h: 50, x: 60, y: 60, rot: 0, scale: 2.5 },
+    { name: '左上角',     w: 120, h: 50, x: 6,  y: 6,  rot: -8 }
+  ];
+
+  cases.forEach(function (c) {
+    var el = document.createElement('div');
+    el.className = 'piece is-selected';
+    el.style.width = c.w + 'px';
+    el.style.height = c.h + 'px';
+    el.style.left = c.x + '%';
+    el.style.top = c.y + '%';
+    el.style.transform = 'translate(-50%,-50%) rotate(' + c.rot + 'deg) scale(' + (c.scale || 1) + ')';
+    var face = document.createElement('div');
+    face.className = 'piece__face';
+    face.style.background = '#f3ead8';
+    el.appendChild(face);
+    board.appendChild(el);
+
+    layoutTools(el.getBoundingClientRect());
+
+    var tr = tools.getBoundingClientRect();
+    var pr = el.getBoundingClientRect();
+    var br = board.getBoundingClientRect();
+    var below = tools.dataset.below === '1';
+    var gapY = below ? (tr.top - pr.bottom) : (pr.top - tr.bottom);
+    /* 小尖角实际指向的位置 与 碎片中心的偏差（这才是"指得准不准"） */
+    var arrowLeft = tr.left + parseFloat(getComputedStyle(tools, '::after').left || '0');
+    var arrowErr = Math.round(arrowLeft + 5 - (pr.left + pr.width / 2));
+    var over = {
+      上: Math.round(br.top - tr.top), 下: Math.round(tr.bottom - br.bottom),
+      左: Math.round(br.left - tr.left), 右: Math.round(tr.right - br.right)
+    };
+    var bad = gapY < 6 || gapY > 14 || Math.abs(arrowErr) > 6 || over.上 > 0 || over.下 > 0 || over.左 > 0 || over.右 > 0;
+
+    results.push({
+      位置: c.name,
+      在碎片: below ? '下方' : '上方',
+      竖直间距: Math.round(gapY),
+      尖角偏差: arrowErr,
+      越界: (over.上 > 0 || over.下 > 0 || over.左 > 0 || over.右 > 0) ? over : '无',
+      判定: bad ? '✗' : '✓'
+    });
+    board.removeChild(el);
+  });
+
+  var bads = results.filter(function (r) { return r.判定 === '✗'; });
+  document.getElementById('p11').textContent = JSON.stringify({
+    板子: Math.round(board.clientWidth) + '×' + Math.round(board.clientHeight),
+    定位祖先: tools.offsetParent ? (tools.offsetParent.className || tools.offsetParent.tagName) : 'null',
+    工具条尺寸: T + '×' + TT,
+    结论: bads.length ? '有问题 ' + bads.length + ' 项' : '全部合格：间距≈10px、中心对齐、不越界',
+    明细: results
+  }, null, 1);
+});
+</script>
+</body>
+</html>

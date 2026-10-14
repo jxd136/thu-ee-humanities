@@ -1,0 +1,13 @@
+# 单文件成品是打包产物（由 tools/build.js 从 src/ 生成），
+# 标记为 generated 以免撑起语言统计、也不要在 diff 里展开
+人文组.html            linguist-generated=true -diff
+build/*.html           linguist-generated=true -diff
+
+# 图片按二进制处理
+*.png binary
+*.jpg binary
+
+# 统一换行，避免 Windows / macOS 协作时整文件 diff
+* text=auto eol=lf
+*.ps1 text eol=crlf
+*.bat text eol=crlf

@@ -1,0 +1,19 @@
+# —— 与本项目无关的目录（同目录下其他项目 / 工具备份）——
+_dsh-acl-recovery/
+光电实验/
+
+# —— 构建产物：单文件成品在根目录与 build/ 已有一份，index 是重复副本 ——
+build/index.html
+build/dist.html
+
+# —— 测试截图：体积大，且不进版本控制；README 里引用的 preview-*.png 例外 ——
+test/*.png
+!test/preview-*.png
+test/preview-模板-*.png
+
+# —— 编辑器 / 系统 ——
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+*.log

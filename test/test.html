@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>自检 · 拼贴诗工作台</title>
+<link rel="stylesheet" href="../src/styles.css">
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="wrap topbar__inner">
+    <a class="brand" href="#top">
+      <span class="brand__mark">人</span>
+      <span class="brand__text">
+        <span class="brand__title">电子系团委 · 人文组</span>
+        <span class="brand__sub">Tsinghua EE · HUMANITIES</span>
+      </span>
+    </a>
+    <nav class="tabs" role="tablist" aria-label="页面导航">
+      <button class="tab" type="button" role="tab" data-tab="intro" aria-selected="true">关于我们</button>
+      <button class="tab" type="button" role="tab" data-tab="studio" aria-selected="false">拼贴诗工作台</button>
+      <button class="tab" type="button" role="tab" data-tab="assets" aria-selected="false">素材 · 剪字</button>
+      <button class="tab" type="button" role="tab" data-tab="help" aria-selected="false">玩法说明</button>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="wrap" data-view="intro">
+    <div class="hero">
+      <span class="hero__kicker">Tsinghua EE · 人文组</span>
+      <h1 class="hero__title">把工科生的浪漫，<br><em>剪下来贴成诗</em>。</h1>
+      <p class="hero__lead">
+        人文组是电子工程系团委里负责「文字与审美」的部门：写稿、做图、办文化活动。
+        这页下面是我们做的拼贴诗生成器，欢迎随手玩一张带走。
+      </p>
+      <div class="hero__meta">
+        <span class="chip"><b>造词</b> 偏正 / 主谓 / 动宾 / 联合 …</span>
+        <span class="chip"><b>拼贴</b> 上传图片自动剪字</span>
+        <span class="chip"><b>出图</b> 一键导出 PNG</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="sec-head">
+        <span class="sec-num">01 / ABOUT</span>
+        <h2>我们是谁</h2>
+        <span class="sec-note">组织介绍</span>
+      </div>
+      <div class="intro-grid">
+        <div class="card intro-card">
+          <h3>一句话定位</h3>
+          <p>人文组是电子系团委的<b>文字与视觉输出中枢</b>。</p>
+          <div class="quote">「我们不改电路，<br>我们改稿。」</div>
+        </div>
+        <div class="card">
+          <h3>基本情况</h3>
+          <ul class="fact-list">
+            <li><span class="k">隶属</span><span class="v">清华大学电子工程系团委</span></li>
+            <li><span class="k">分工</span><span class="v">宣传文案 · 视觉设计 · 文化活动</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="duty-grid">
+        <article class="duty"><span class="duty__no">A</span><h4>写</h4><p>新闻稿、活动预告、人物专访。</p><div class="duty__tags"><span>文案</span></div></article>
+        <article class="duty"><span class="duty__no">B</span><h4>做</h4><p>海报、展板、banner。</p><div class="duty__tags"><span>海报</span></div></article>
+        <article class="duty"><span class="duty__no">C</span><h4>办</h4><p>拼贴诗工作坊、读书会。</p><div class="duty__tags"><span>工作坊</span></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap" data-view="studio" hidden>
+    <div class="studio-grid">
+      <div class="panel">
+        <div class="panel__head"><h3>造词机</h3><span class="panel__hint"><b id="structCount">10</b> 种句法 · <b id="bankSize">0</b> 个词</span></div>
+        <div class="panel__body">
+          <div class="field"><span class="field__label">短语结构</span><div class="seg" id="typeRow" role="group"></div></div>
+          <div class="type-note" id="typeNote"></div>
+          <div class="field" style="margin-top:14px"><button class="btn btn--primary btn--block" type="button" id="btnGenerate">造词</button></div>
+          <div class="result-box" id="resultBox"></div>
+          <div class="history"><h4>词句篓</h4><div class="history-list" id="historyList"></div></div>
+          <div class="field" style="margin-top:14px">
+            <div class="btn-row">
+              <button class="btn btn--sm" type="button" id="btnRandom">随机拼一首</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel board-panel">
+        <div class="panel__head"><h3>拼贴板</h3><span class="panel__hint">拖动排版</span></div>
+        <div class="board-toolbar">
+          <button class="btn btn--sm" type="button" id="btnUndo">↺</button>
+          <button class="btn btn--sm" type="button" id="btnRedo">↻</button>
+          <span class="sep"></span>
+          <button class="btn btn--sm" type="button" id="btnClear">清空</button>
+          <span class="sep"></span>
+          <span class="swatches" id="toneRow" role="group">
+            <button class="swatch" type="button" data-tone="charcoal" aria-pressed="true"></button>
+          </span>
+          <span class="sep"></span>
+          <button class="btn btn--sm" type="button" id="btnTemplate">背景模板</button>
+          <button class="btn btn--sm" type="button" id="btnRandomTpl">🎲</button>
+          <span class="sep"></span>
+          <button class="btn btn--sm btn--primary" type="button" id="btnExport">导出 PNG</button>
+        </div>
+        <div class="board-stage">
+          <div class="board" id="board" data-tone="charcoal">
+            <div class="board__paper" id="boardPaper" aria-hidden="true">
+              <div class="board__tex" id="boardTex"></div>
+              <canvas class="board__lines" id="boardLines"></canvas>
+            </div>
+            <div class="board__empty" id="boardEmpty">还没有碎片</div>
+          </div>
+          <div class="fx-row" id="fxRow" hidden>
+            <span class="fx-row__label">纸感</span>
+            <span class="seg seg--sm" id="texRow" role="group"></span>
+            <span class="fx-row__label">褶皱</span>
+            <input type="range" id="foldRange" min="0" max="100" value="35">
+            <span class="fx-val" id="foldVal">35</span>
+            <span class="fx-row__label">墨感</span>
+            <input type="range" id="inkRange" min="0" max="100" value="30">
+            <span class="fx-val" id="inkVal">30</span>
+            <button class="btn btn--sm" type="button" data-act="dice">🎲 随机质感</button>
+            <button class="btn btn--sm" type="button" data-act="applyAll">应用到全部</button>
+          </div>
+
+          <div class="piece-tools" id="pieceTools" role="toolbar">
+            <button type="button" data-act="rot-l">↺</button>
+            <button type="button" data-act="rot-r">↻</button>
+            <span class="divider"></span>
+            <button type="button" data-act="smaller">−</button>
+            <button type="button" data-act="bigger">＋</button>
+            <span class="zoom"><input type="range" id="zoomRange" min="28" max="360" value="100"><span id="zoomVal">100%</span></span>
+            <span class="divider"></span>
+            <button type="button" data-act="tape" aria-pressed="false">▭</button>
+            <button type="button" data-act="fx" aria-pressed="false">质</button>
+            <button type="button" data-act="backing" aria-pressed="true">纸</button>
+            <button type="button" data-act="flat" aria-pressed="false">✂</button>
+            <button type="button" data-act="font">字</button>
+            <button type="button" data-act="ink">◐</button>
+            <span class="divider"></span>
+            <button type="button" data-act="front">↑</button>
+            <button type="button" data-act="dup">⎘</button>
+            <button type="button" data-act="del">✕</button>
+          </div>
+        </div>
+        <div class="board-foot"><span>拖动碎片排版</span><span class="dot"></span><span>双击文字可改字</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap" data-view="assets" hidden>
+    <div class="asset-grid">
+      <div class="panel">
+        <div class="panel__head"><h3>导入图片</h3><span class="panel__hint">不上传服务器</span></div>
+        <div class="panel__body">
+          <div class="drop" id="drop"><strong>点击选择 / 拖到这里 / Ctrl+V 粘贴</strong><span>图片只在浏览器本地处理</span></div>
+          <input type="file" id="imageInput" accept="image/*" multiple hidden>
+          <div class="field" style="margin-top:14px"><div class="btn-row"><button class="btn btn--sm" type="button" id="btnSample">用内置样张试试</button></div></div>
+          <div class="ctrl-row">
+            <label for="cropMode" style="flex:none">识别模式</label>
+            <select id="cropMode" class="btn btn--sm" style="flex:1">
+              <option value="auto">自动判断</option>
+              <option value="dark">深字浅底</option>
+              <option value="light">浅字深底</option>
+            </select>
+          </div>
+          <div class="ctrl-row">
+            <label for="thrBias" style="flex:none">识别阈值</label>
+            <input type="range" id="thrBias" min="-60" max="60" step="5" value="0">
+            <span class="val" id="thrVal">0</span>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel__head"><h3>碎片篮</h3><span class="panel__hint">点碎片贴到板上</span></div>
+        <div class="panel__body">
+          <div class="frag-tray" id="fragTray"></div>
+          <div class="btn-row" style="margin-top:16px">
+            <button class="btn btn--sm btn--primary" type="button" id="btnAddAll">全部贴到板上</button>
+            <button class="btn btn--sm" type="button" id="btnClearFrags">清空碎片篮</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap" data-view="help" hidden>
+    <div class="help-grid">
+      <div class="help-item"><h4>① 造词机</h4><ul><li>选结构，点造词</li></ul></div>
+      <div class="help-item"><h4>② 剪字</h4><ul><li>上传图片自动框字</li></ul></div>
+    </div>
+  </section>
+</main>
+
+<div class="modal" id="modalExport" role="dialog" aria-modal="true">
+  <div class="modal__box" style="width:min(560px,100%)">
+    <div class="modal__head"><h3>导出拼贴诗</h3><button class="btn btn--sm" type="button" data-close>关闭</button></div>
+    <div class="modal__body">
+      <div class="field"><label for="expName">文件名</label><input class="btn" id="expName" type="text" value="拼贴诗" style="width:100%"></div>
+      <div class="field"><label for="expTitle">标题</label><input class="btn" id="expTitle" type="text" value="" style="width:100%"></div>
+      <div class="field"><label for="expScale">分辨率</label>
+        <select class="btn" id="expScale" style="width:100%"><option value="1">1×</option><option value="2" selected>2×</option><option value="3">3×</option></select>
+      </div>
+      <div class="field"><label class="switch"><input type="checkbox" id="expTone" checked> 做旧调色</label></div>
+      <div class="field"><label class="switch"><input type="checkbox" id="expMark" checked> 保留落款</label></div>
+      <div class="field"><label class="switch"><input type="checkbox" id="expTransparent"> 透明背景</label></div>
+      <div class="btn-row" style="margin-top:18px"><button class="btn btn--primary btn--block" type="button" id="expDo">导出 PNG</button></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modalCrop" role="dialog" aria-modal="true">
+  <div class="modal__box">
+    <div class="modal__head"><h3>识别到的文字</h3><span class="panel__hint" id="cropCount"></span><button class="btn btn--sm" type="button" data-close>关闭</button></div>
+    <div class="modal__body">
+      <div class="crop-stage" id="cropStage"></div>
+      <div class="btn-row" style="margin-top:16px">
+        <button class="btn btn--sm" type="button" id="cropAll">全选</button>
+        <button class="btn btn--sm" type="button" id="cropNone">全不选</button>
+        <button class="btn btn--sm btn--primary" type="button" id="cropAdd">剪下选中的文字</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modalTemplate" role="dialog" aria-modal="true">
+  <div class="modal__box" style="width:min(880px,100%)">
+    <div class="modal__head"><h3>选择背景模板</h3><button class="btn btn--sm" type="button" id="tplRandom">随机一套</button><button class="btn btn--sm" type="button" data-close>关闭</button></div>
+    <div class="modal__body"><div class="tpl-grid" id="tplGrid"></div></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- 自检：捕获运行时错误、暴露内部状态、跑一遍关键交互 -->
+<script>
+window.__errs = [];
+window.addEventListener('error', function (e) {
+  window.__errs.push('error: ' + (e.message || '') + ' @' + (e.filename || '') + ':' + (e.lineno || 0));
+});
+window.addEventListener('unhandledrejection', function (e) {
+  window.__errs.push('rejection: ' + ((e.reason && (e.reason.message || e.reason)) || ''));
+});
+</script>
+<script src="../src/paper.js"></script>
+<script src="../src/script.js"></script>
+<script src="harness.js"></script>
+</body>
+</html>

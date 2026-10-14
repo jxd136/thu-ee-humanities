@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>质感面板单点验证</title>
+<link rel="stylesheet" href="../src/styles.css">
+</head>
+<body>
+<div style="padding:10px;display:flex;gap:10px;flex-wrap:wrap">
+  <button id="addPieces">造几片字</button>
+  <span id="tip" style="font-size:12px;color:#666"></span>
+</div>
+<div style="display:flex;gap:10px;padding:10px;flex-wrap:wrap" id="preview"></div>
+<div style="padding:10px">
+  <div class="board-stage">
+    <div class="board" id="board" data-tone="plain">
+      <div class="board__paper" id="boardPaper"><div class="board__tex" id="boardTex"></div><canvas class="board__lines" id="boardLines"></canvas></div>
+      <div class="board__empty" id="boardEmpty"></div>
+    </div>
+    <div class="fx-row" id="fxRow" hidden>
+      <span class="fx-row__label">纸感</span><span class="seg seg--sm" id="texRow"></span>
+      <span class="fx-row__label">褶皱</span><input type="range" id="foldRange" min="0" max="100" value="35"><span class="fx-val" id="foldVal">35</span>
+      <span class="fx-row__label">墨感</span><input type="range" id="inkRange" min="0" max="100" value="30"><span class="fx-val" id="inkVal">30</span>
+      <button class="btn btn--sm" type="button" data-act="dice">🎲 随机质感</button>
+      <button class="btn btn--sm" type="button" data-act="applyAll">应用到全部</button>
+    </div>
+    <div class="piece-tools" id="pieceTools">
+      <button type="button" data-act="rot-l">↺</button><button type="button" data-act="rot-r">↻</button>
+      <span class="divider"></span><button type="button" data-act="smaller">−</button><button type="button" data-act="bigger">＋</button>
+      <span class="zoom"><input type="range" id="zoomRange" min="28" max="360" value="100"><span id="zoomVal">100%</span></span>
+      <span class="divider"></span>
+      <button type="button" data-act="tape">▭</button>
+      <button type="button" data-act="fx">质</button>
+      <button type="button" data-act="backing">纸</button>
+      <button type="button" data-act="flat">✂</button>
+      <button type="button" data-act="font">字</button>
+      <button type="button" data-act="ink">◐</button>
+      <span class="divider"></span>
+      <button type="button" data-act="front">↑</button><button type="button" data-act="dup">⎘</button><button type="button" data-act="del">✕</button>
+    </div>
+  </div>
+</div>
+<div style="padding:10px">
+  <button id="btnGenerate">造词</button><div class="seg" id="typeRow"></div><div id="typeNote"></div>
+  <div class="result-box" id="resultBox"></div><div id="historyList"></div>
+  <div id="poolList"></div><span id="poolCount"></span><button id="btnPoolGen"></button><button id="btnPoolAll"></button><button id="btnPoolNone"></button>
+  <textarea id="customInput"></textarea><button id="btnCustomAdd"></button><button id="btnCustomStickAll"></button><span id="customCount"></span>
+  <button id="btnRandom"></button><button id="btnClear"></button><button id="btnUndo"></button><button id="btnRedo"></button>
+  <button id="btnExport"></button><button id="btnTemplate"></button><button id="btnRandomTpl"></button>
+  <div class="tpl-grid" id="tplGrid"></div>
+  <div id="fragTray"></div><input id="imageInput" type="file"><div id="drop"></div>
+  <button id="btnSample"></button><button id="btnAddAll"></button><button id="btnClearFrags"></button>
+  <select id="cropMode"><option value="auto">auto</option></select><input id="thrBias"><span id="thrVal"></span>
+  <div class="crop-stage" id="cropStage"></div><span id="cropCount"></span>
+  <button id="cropAll"></button><button id="cropNone"></button><button id="cropAdd"></button>
+  <div class="modal" id="modalTemplate"><div data-close></div></div>
+  <div class="modal" id="modalExport"><div data-close></div><button id="expDo"></button>
+    <input id="expName"><input id="expTitle"><select id="expScale"><option value="2">2</option></select>
+    <input type="checkbox" id="expTone"><input type="checkbox" id="expMark"><input type="checkbox" id="expTransparent"></div>
+  <div class="modal" id="modalCrop"><div data-close></div></div>
+  <div class="toast" id="toast"></div>
+</div>
+<pre id="p20" style="font-size:11px">running…</pre>
+<script src="../src/paper.js"></script>
+<script src="../src/corpus.js"></script>
+<script src="../src/script.js"></script>
+<script>
+/* 只做一件事：把每种纸感 + 墨感做成一张贴纸，摆出来看 + 量 */
+function log(s) { document.getElementById('p20').textContent = s; }
+
+setTimeout(function () {
+  var out = {};
+  /* 用应用自己的路径造 5 片字 */
+  var rb = document.getElementById('resultBox');
+  document.getElementById('btnGenerate').click();
+  var pills = rb.querySelectorAll('.pill');
+  out['造词条数'] = pills.length;
+  for (var i = 0; i < Math.min(5, pills.length); i++) {
+    pills[i].querySelector('[data-act="stick"]').click();
+  }
+  var pieces = document.querySelectorAll('#board .piece');
+  out['板上碎片'] = pieces.length;
+
+  /* 逐片套不同纸感 */
+  var texKeys = ['folded', 'news', 'exam', 'aged', 'crease'];
+  var rows = [];
+  for (var k = 0; k < pieces.length && k < texKeys.length; k++) {
+    var el = pieces[k];
+    var r = el.getBoundingClientRect();
+    el.dispatchEvent(new PointerEvent('pointerdown', {
+      bubbles: true, cancelable: true, clientX: r.left + r.width / 2, clientY: r.top + r.height / 2,
+      pointerId: 5, isPrimary: true }));
+    window.dispatchEvent(new PointerEvent('pointerup', { bubbles: true, pointerId: 5, isPrimary: true }));
+    /* 打开质感面板 */
+    document.querySelector('#pieceTools [data-act="fx"]').click();
+    var btn = Array.prototype.filter.call(document.querySelectorAll('#texRow button'), function (b) {
+      return b.dataset.tex === texKeys[k];
+    })[0];
+    if (!btn) { rows.push({ 纸感: texKeys[k], 结果: '按钮不存在' }); continue; }
+    btn.click();
+    /* 墨感也拉高 */
+    var ink = document.getElementById('inkRange');
+    ink.value = String(30 + k * 15);
+    ink.dispatchEvent(new Event('input', { bubbles: true }));
+    var face = el.querySelector('.piece__face');
+    rows.push({
+      纸感: texKeys[k],
+      纸纹: getComputedStyle(face).backgroundImage !== 'none',
+      混合: getComputedStyle(face).backgroundBlendMode,
+      高光层: !!el.querySelector('.piece__ink-hi'),
+      墨感: document.getElementById('inkVal').textContent
+    });
+  }
+  out['各片质感'] = rows;
+
+  /* 随机质感 + 应用全部 */
+  document.querySelector('#fxRow [data-act="dice"]').click();
+  out['随机后第一片纸纹'] = getComputedStyle(document.querySelector('#board .piece .piece__face')).backgroundImage.slice(0, 30);
+  document.querySelector('#fxRow [data-act="applyAll"]').click();
+  out['应用全部后'] = Array.prototype.map.call(document.querySelectorAll('#board .piece .piece__face'),
+    function (f) { return getComputedStyle(f).backgroundBlendMode; }).join(',');
+
+  /* 导出画布检查：真的画了纸纹和字 */
+  document.getElementById('btnExport').click();
+  var real = HTMLAnchorElement.prototype.click;
+  var grabbed = null;
+  HTMLAnchorElement.prototype.click = function () {
+    if (this.download) { grabbed = this.download; return; }
+    return real.apply(this, arguments);
+  };
+  document.getElementById('expDo').click();
+  HTMLAnchorElement.prototype.click = real;
+  out['导出文件'] = grabbed || '未触发';
+
+  log(JSON.stringify(out, null, 1));
+  document.title = 'DONE';
+}, 700);
+</script>
+</body>
+</html>
